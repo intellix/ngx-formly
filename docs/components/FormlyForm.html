@@ -194,7 +194,7 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(formlyBuilder: <a href="../injectables/FormlyFormBuilder.html">FormlyFormBuilder</a>, componentFactoryResolver: <a href="https://angular.io/api/core/ComponentFactoryResolver" target="_blank">ComponentFactoryResolver</a>, parentForm: <a href="https://angular.io/api/forms/NgForm" target="_blank">NgForm</a>, parentFormGroup: <a href="https://angular.io/api/forms/FormGroupDirective" target="_blank">FormGroupDirective</a>, parentFormlyForm: <a href="../components/FormlyForm.html">FormlyForm</a>)</code>
+<code>constructor(formlyBuilder: <a href="../injectables/FormlyFormBuilder.html">FormlyFormBuilder</a>, componentFactoryResolver: <a href="https://angular.io/api/core/ComponentFactoryResolver" target="_blank">ComponentFactoryResolver</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>, parentForm: <a href="https://angular.io/api/forms/NgForm" target="_blank">NgForm</a>, parentFormGroup: <a href="https://angular.io/api/forms/FormGroupDirective" target="_blank">FormGroupDirective</a>, parentFormlyForm: <a href="../components/FormlyForm.html">FormlyForm</a>)</code>
                     </td>
                 </tr>
                         <tr>
@@ -233,6 +233,18 @@
                                                   
                                                         <td>
                                                                     <code><a href="https://angular.io/api/core/ComponentFactoryResolver" target="_blank" >ComponentFactoryResolver</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>injector</td>
+                                                  
+                                                        <td>
+                                                                    <code><a href="https://angular.io/api/core/Injector" target="_blank" >Injector</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -452,7 +464,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="78" class="link-to-prism">src/core/src/lib/components/formly.form.ts:78</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="79" class="link-to-prism">src/core/src/lib/components/formly.form.ts:79</a></div>
                             </td>
                         </tr>
 
@@ -521,7 +533,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="83" class="link-to-prism">src/core/src/lib/components/formly.form.ts:83</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="84" class="link-to-prism">src/core/src/lib/components/formly.form.ts:84</a></div>
                             </td>
                         </tr>
 
@@ -544,7 +556,7 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, DoCheck, OnChanges, Input, SimpleChanges, Optional, EventEmitter, Output, SkipSelf, OnDestroy, ComponentFactoryResolver } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, DoCheck, OnChanges, Input, SimpleChanges, Optional, EventEmitter, Output, SkipSelf, OnDestroy, ComponentFactoryResolver, Injector } from &#x27;@angular/core&#x27;;
 import { FormGroup, FormArray, NgForm, FormGroupDirective } from &#x27;@angular/forms&#x27;;
 import { FormlyFieldConfig, FormlyFormOptions, FormlyFormOptionsCache } from &#x27;./formly.field.config&#x27;;
 import { FormlyFormBuilder } from &#x27;../services/formly.form.builder&#x27;;
@@ -591,6 +603,7 @@ export class FormlyForm implements DoCheck, OnChanges, OnDestroy {
   constructor(
     private formlyBuilder: FormlyFormBuilder,
     private componentFactoryResolver: ComponentFactoryResolver,
+    private injector: Injector,
     @Optional() private parentForm: NgForm,
     @Optional() private parentFormGroup: FormGroupDirective,
     @Optional() @SkipSelf() private parentFormlyForm: FormlyForm,
@@ -695,6 +708,10 @@ export class FormlyForm implements DoCheck, OnChanges, OnDestroy {
 
     if (!(&lt;FormlyFormOptionsCache&gt; this.options)._componentFactoryResolver) {
       (&lt;FormlyFormOptionsCache&gt; this.options)._componentFactoryResolver &#x3D; this.componentFactoryResolver;
+    }
+
+    if (!(&lt;FormlyFormOptionsCache&gt; this.options)._injector) {
+      (&lt;FormlyFormOptionsCache&gt; this.options)._injector &#x3D; this.injector;
     }
   }
 

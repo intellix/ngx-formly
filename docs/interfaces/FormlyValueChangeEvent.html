@@ -194,7 +194,7 @@
 import { Subject, Observable } from &#x27;rxjs&#x27;;
 import { FieldType } from &#x27;../templates/field.type&#x27;;
 import { TemplateManipulators } from &#x27;../services/formly.config&#x27;;
-import { ComponentFactoryResolver, ComponentRef } from &#x27;@angular/core&#x27;;
+import { ComponentFactoryResolver, ComponentRef, Injector } from &#x27;@angular/core&#x27;;
 
 export interface FormlyFieldConfig {
   /**
@@ -441,6 +441,7 @@ export interface FormlyFormOptionsCache extends FormlyFormOptions {
   _markForCheck?: (field: FormlyFieldConfigCache) &#x3D;&gt; void;
   _buildForm?: () &#x3D;&gt; void;
   _componentFactoryResolver?: ComponentFactoryResolver;
+  _injector?: Injector;
 }
 export interface FormlyFormOptions {
   updateInitialValue?: () &#x3D;&gt; void;

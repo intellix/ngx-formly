@@ -258,7 +258,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="193" class="link-to-prism">src/core/src/lib/services/formly.config.ts:193</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="200" class="link-to-prism">src/core/src/lib/services/formly.config.ts:200</a></div>
                             </td>
                         </tr>
 
@@ -481,7 +481,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="185" class="link-to-prism">src/core/src/lib/services/formly.config.ts:185</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="192" class="link-to-prism">src/core/src/lib/services/formly.config.ts:192</a></div>
                             </td>
                         </tr>
 
@@ -550,7 +550,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="197" class="link-to-prism">src/core/src/lib/services/formly.config.ts:197</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="204" class="link-to-prism">src/core/src/lib/services/formly.config.ts:204</a></div>
                             </td>
                         </tr>
 
@@ -619,7 +619,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="161" class="link-to-prism">src/core/src/lib/services/formly.config.ts:161</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="168" class="link-to-prism">src/core/src/lib/services/formly.config.ts:168</a></div>
                             </td>
                         </tr>
 
@@ -688,7 +688,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="201" class="link-to-prism">src/core/src/lib/services/formly.config.ts:201</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="208" class="link-to-prism">src/core/src/lib/services/formly.config.ts:208</a></div>
                             </td>
                         </tr>
 
@@ -826,7 +826,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="169" class="link-to-prism">src/core/src/lib/services/formly.config.ts:169</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="176" class="link-to-prism">src/core/src/lib/services/formly.config.ts:176</a></div>
                             </td>
                         </tr>
 
@@ -907,7 +907,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="181" class="link-to-prism">src/core/src/lib/services/formly.config.ts:181</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="188" class="link-to-prism">src/core/src/lib/services/formly.config.ts:188</a></div>
                             </td>
                         </tr>
 
@@ -976,7 +976,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="152" class="link-to-prism">src/core/src/lib/services/formly.config.ts:152</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="159" class="link-to-prism">src/core/src/lib/services/formly.config.ts:159</a></div>
                             </td>
                         </tr>
 
@@ -1317,7 +1317,7 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, InjectionToken, ComponentRef, ComponentFactoryResolver } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, InjectionToken, ComponentRef, ComponentFactoryResolver, Injector } from &#x27;@angular/core&#x27;;
 import { ValidationErrors, FormGroup, FormArray, AbstractControl } from &#x27;@angular/forms&#x27;;
 import { FieldType } from &#x27;./../templates/field.type&#x27;;
 import { reverseDeepMerge, defineHiddenProp } from &#x27;./../utils&#x27;;
@@ -1442,7 +1442,11 @@ export class FormlyConfig {
   }
 
   /** @internal */
-  createComponentInstance(field: FormlyFieldConfigCache &#x3D; {}, resolver?: ComponentFactoryResolver): ComponentRef&lt;FieldType&gt; {
+  createComponentInstance(
+    field: FormlyFieldConfigCache &#x3D; {},
+    resolver?: ComponentFactoryResolver,
+    injector?: Injector,
+  ): ComponentRef&lt;FieldType&gt; {
     if (!field.type) {
       return;
     }
@@ -1456,12 +1460,15 @@ export class FormlyConfig {
     if (!resolver) {
       resolver &#x3D; field.parent.options._componentFactoryResolver;
     }
+    if (!injector) {
+      injector &#x3D; field.parent.options._injector;
+    }
 
     defineHiddenProp(field, &#x27;_componentFactory&#x27;, {
       type: field.type,
       component: type.component,
       componentRef: resolver
-        ? resolver.resolveComponentFactory(type.component).create((&lt;any&gt; resolver)._ngModule.injector)
+        ? resolver.resolveComponentFactory(type.component).create(injector)
         : null,
     });
 

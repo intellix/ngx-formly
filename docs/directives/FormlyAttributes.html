@@ -147,12 +147,12 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(renderer: <a href="https://angular.io/api/core/Renderer2" target="_blank">Renderer2</a>, elementRef: <a href="https://angular.io/api/core/ElementRef" target="_blank">ElementRef</a>)</code>
+<code>constructor(renderer: <a href="https://angular.io/api/core/Renderer2" target="_blank">Renderer2</a>, elementRef: <a href="https://angular.io/api/core/ElementRef" target="_blank">ElementRef</a>, _document: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                     </td>
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:40</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:48</a></div>
                             </td>
                         </tr>
 
@@ -193,6 +193,18 @@
                                                     </td>
                                                     
                                                 </tr>
+                                                <tr>
+                                                        <td>_document</td>
+                                                  
+                                                        <td>
+                                                                    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
                                         </tbody>
                                     </table>
                             </div>
@@ -220,7 +232,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-2" colspan="2">
-                                    <div class="io-line">Defined in <a href="" data-line="18" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:18</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="20" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:20</a></div>
                             </td>
                         </tr>
             </tbody>
@@ -256,7 +268,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:31</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="37" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:37</a></div>
                             </td>
                         </tr>
 
@@ -290,7 +302,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="24" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:24</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:27</a></div>
                             </td>
                         </tr>
 
@@ -321,7 +333,7 @@
                 </tr>
                             <tr>
                                 <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="38" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:38</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/core/src/lib/components/formly.attributes.ts:46</a></div>
                                 </td>
                             </tr>
 
@@ -333,8 +345,10 @@
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Directive, HostListener, ElementRef, Input, OnChanges, SimpleChanges, Renderer2, DoCheck } from &#x27;@angular/core&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Directive, HostListener, ElementRef, Input, OnChanges, SimpleChanges, Renderer2, DoCheck, Inject } from &#x27;@angular/core&#x27;;
 import { FormlyFieldConfig, FormlyTemplateOptions } from &#x27;./formly.field.config&#x27;;
+import { wrapProperty } from &#x27;../utils&#x27;;
+import { DOCUMENT } from &#x27;@angular/platform-browser&#x27;;
 
 @Directive({
   selector: &#x27;[formlyAttributes]&#x27;,
@@ -355,21 +369,27 @@ export class FormlyAttributes implements OnChanges, DoCheck {
   private placeholder?: string;
   private tabindex?: number;
   private readonly?: boolean;
+  private document: Document;
 
   @HostListener(&#x27;focus&#x27;, [&#x27;$event&#x27;]) onFocus($event) {
-    this.field.focus &#x3D; true;
+    if (!this.field.focus) {
+      this.field.focus &#x3D; true;
+    }
+
     if (this.to.focus) {
       this.to.focus(this.field, $event);
     }
   }
 
   @HostListener(&#x27;blur&#x27;, [&#x27;$event&#x27;]) onBlur($event) {
-    this.field.focus &#x3D; false;
+    if (this.field.focus) {
+      this.field.focus &#x3D; false;
+    }
+
     if (this.to.blur) {
       this.to.blur(this.field, $event);
     }
   }
-
   get to(): FormlyTemplateOptions {
     return this.field.templateOptions || {};
   }
@@ -377,26 +397,37 @@ export class FormlyAttributes implements OnChanges, DoCheck {
   constructor(
     private renderer: Renderer2,
     private elementRef: ElementRef,
-  ) {}
+    @Inject(DOCUMENT) _document: any,
+  ) {
+    this.document &#x3D; _document;
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.field) {
-      const fieldChanges &#x3D; changes.field;
-
       this.renderer.setAttribute(this.elementRef.nativeElement, &#x27;id&#x27;, this.field.id);
       if (this.to &amp;&amp; this.to.attributes) {
-        this.setAttributes(this.to.attributes);
-        Object.defineProperty(this.to, &#x27;attributes&#x27;, {
-          get: () &#x3D;&gt; this.to.__attributes__,
-          set: attributes &#x3D;&gt; this.setAttributes(attributes),
-          enumerable: true,
-          configurable: true,
+        wrapProperty(this.to, &#x27;attributes&#x27;, (newVal, oldValue) &#x3D;&gt; {
+          if (oldValue) {
+            Object.keys(oldValue).forEach(attr &#x3D;&gt; this.renderer.removeAttribute(this.elementRef.nativeElement, attr));
+          }
+
+          if (newVal) {
+            Object.keys(newVal).forEach(attr &#x3D;&gt; this.setAttribute(attr, newVal[attr]));
+          }
         });
       }
 
-      if ((fieldChanges.previousValue || {}).focus !&#x3D;&#x3D; (fieldChanges.currentValue || {}).focus &amp;&amp; this.elementRef.nativeElement.focus) {
-        this.elementRef.nativeElement[this.field.focus ? &#x27;focus&#x27; : &#x27;blur&#x27;]();
-      }
+      wrapProperty(this.field, &#x27;focus&#x27;, (value) &#x3D;&gt; {
+        if (!this.elementRef.nativeElement.focus) {
+          return;
+        }
+
+        if (this.document.activeElement !&#x3D;&#x3D; this.elementRef.nativeElement &amp;&amp; value) {
+          this.elementRef.nativeElement.focus();
+        } else if (this.document.activeElement &#x3D;&#x3D;&#x3D; this.elementRef.nativeElement &amp;&amp; !value) {
+          this.elementRef.nativeElement.blur();
+        }
+      });
     }
   }
 
@@ -410,30 +441,23 @@ export class FormlyAttributes implements OnChanges, DoCheck {
    */
   ngDoCheck() {
     if (this.placeholder !&#x3D;&#x3D; this.to.placeholder) {
-      this.renderer.setAttribute(this.elementRef.nativeElement, &#x27;placeholder&#x27;, this.to.placeholder);
+      this.setAttribute(&#x27;placeholder&#x27;, this.to.placeholder);
       this.placeholder &#x3D; this.to.placeholder;
     }
 
     if (this.tabindex !&#x3D;&#x3D; this.to.tabindex) {
-      this.renderer.setAttribute(this.elementRef.nativeElement, &#x27;tabindex&#x27;, &#x60;${this.to.tabindex || 0}&#x60;);
+      this.setAttribute(&#x27;tabindex&#x27;, &#x60;${this.to.tabindex || 0}&#x60;);
       this.tabindex &#x3D; this.to.tabindex;
     }
 
     if (this.readonly !&#x3D;&#x3D; this.to.readonly) {
-      this.renderer.setAttribute(this.elementRef.nativeElement, &#x27;readonly&#x27;, &#x60;${this.to.readonly}&#x60;);
+      this.setAttribute(&#x27;readonly&#x27;, &#x60;${this.to.readonly}&#x60;);
       this.readonly &#x3D; this.to.readonly;
     }
   }
 
-  private setAttributes(attributes) {
-    if (this.to.__attributes__ &amp;&amp; this.to.__attributes__ !&#x3D;&#x3D; attributes) {
-      Object.keys(this.to.__attributes__).forEach(name &#x3D;&gt; this.renderer.removeAttribute(this.elementRef.nativeElement, name));
-    }
-
-    this.to.__attributes__ &#x3D; attributes;
-    Object.keys(attributes).forEach(name &#x3D;&gt; this.renderer.setAttribute(
-      this.elementRef.nativeElement, name, attributes[name] as string,
-    ));
+  private setAttribute(attr: string, value: string) {
+    this.renderer.setAttribute(this.elementRef.nativeElement, attr, value);
   }
 }
 </code></pre>

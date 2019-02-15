@@ -218,7 +218,7 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(formlyConfig: <a href="../injectables/FormlyConfig.html">FormlyConfig</a>, componentFactoryResolver: <a href="https://angular.io/api/core/ComponentFactoryResolver" target="_blank">ComponentFactoryResolver</a>, hideDeprecation)</code>
+<code>constructor(formlyConfig: <a href="../injectables/FormlyConfig.html">FormlyConfig</a>, componentFactoryResolver: <a href="https://angular.io/api/core/ComponentFactoryResolver" target="_blank">ComponentFactoryResolver</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>, hideDeprecation)</code>
                     </td>
                 </tr>
                         <tr>
@@ -257,6 +257,18 @@
                                                   
                                                         <td>
                                                                     <code><a href="https://angular.io/api/core/ComponentFactoryResolver" target="_blank" >ComponentFactoryResolver</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>injector</td>
+                                                  
+                                                        <td>
+                                                                    <code><a href="https://angular.io/api/core/Injector" target="_blank" >Injector</a></code>
                                                         </td>
                                                   
                                                     <td>
@@ -745,7 +757,7 @@
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import {
   Component, EventEmitter, Input, Output, Type,
   ViewContainerRef, ViewChild, ComponentRef, SimpleChanges, Attribute, ComponentFactoryResolver,
-  OnInit, OnChanges, OnDestroy, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked,
+  OnInit, OnChanges, OnDestroy, DoCheck, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked, Injector,
 } from &#x27;@angular/core&#x27;;
 import { FormGroup } from &#x27;@angular/forms&#x27;;
 import { FormlyConfig } from &#x27;../services/formly.config&#x27;;
@@ -798,6 +810,7 @@ export class FormlyField implements OnInit, OnChanges, DoCheck, AfterContentInit
   constructor(
     private formlyConfig: FormlyConfig,
     private componentFactoryResolver: ComponentFactoryResolver,
+    private injector: Injector,
     // tslint:disable-next-line
     @Attribute(&#x27;hide-deprecation&#x27;) hideDeprecation,
   ) {
@@ -853,7 +866,7 @@ export class FormlyField implements OnInit, OnChanges, DoCheck, AfterContentInit
       containerRef &#x3D; this.createWrapperRef(f, containerRef, this.formlyConfig.getWrapper(wrapper));
     });
 
-    const ref &#x3D; this.formlyConfig.createComponentInstance(f, this.componentFactoryResolver);
+    const ref &#x3D; this.formlyConfig.createComponentInstance(f, this.componentFactoryResolver, this.injector);
     if (ref) {
       containerRef.insert(ref.hostView);
       this.attachComponentRef(ref, f);
