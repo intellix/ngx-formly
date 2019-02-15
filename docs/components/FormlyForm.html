@@ -560,7 +560,7 @@
 import { FormGroup, FormArray, NgForm, FormGroupDirective } from &#x27;@angular/forms&#x27;;
 import { FormlyFieldConfig, FormlyFormOptions, FormlyFormOptionsCache } from &#x27;./formly.field.config&#x27;;
 import { FormlyFormBuilder } from &#x27;../services/formly.form.builder&#x27;;
-import { assignModelValue, isNullOrUndefined, reverseDeepMerge } from &#x27;../utils&#x27;;
+import { assignModelValue, isNullOrUndefined, reverseDeepMerge, wrapProperty } from &#x27;../utils&#x27;;
 import { Subscription } from &#x27;rxjs&#x27;;
 import { debounceTime, map, tap } from &#x27;rxjs/operators&#x27;;
 
@@ -667,18 +667,15 @@ export class FormlyForm implements DoCheck, OnChanges, OnDestroy {
     }
 
     if (this.options.parentForm) {
-      let submitted &#x3D; this.options.parentForm.submitted;
-      Object.defineProperty(this.options.parentForm, &#x27;submitted&#x27;, {
-        get: () &#x3D;&gt; submitted,
-        set: value &#x3D;&gt; {
-          submitted &#x3D; value;
+      wrapProperty(this.options.parentForm, &#x27;submitted&#x27;, (newVal, oldVal) &#x3D;&gt; {
+        if (newVal !&#x3D;&#x3D; !!oldVal) {
           (&lt;FormlyFormOptionsCache&gt; this.options)._markForCheck({
             fieldGroup: this.fields,
             model: this.model,
             formControl: this.form,
             options: this.options,
           });
-        },
+        }
       });
     }
 
