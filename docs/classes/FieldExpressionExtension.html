@@ -92,6 +92,9 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                <a href="#onDestroy">onDestroy</a>
+                            </li>
+                            <li>
                                 <a href="#onPopulate">onPopulate</a>
                             </li>
                             <li>
@@ -119,6 +122,75 @@
         <h3 id="methods">
             Methods
         </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="onDestroy"></a>
+                        <span class="name">
+                            <b>
+                            onDestroy
+                            </b>
+                            <a href="#onDestroy"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+<code>onDestroy(field: <a href="../interfaces/FormlyFieldConfigCache.html">FormlyFieldConfigCache</a>)</code>
+                    </td>
+                </tr>
+
+
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="88" class="link-to-prism">src/core/src/lib/extensions/field-expression/field-expression.ts:88</a></div>
+                            </td>
+                        </tr>
+
+
+                <tr>
+                    <td class="col-md-4">
+
+                            <div class="io-description">
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>field</td>
+                                                        <td>
+                                                                    <code><a href="../interfaces/FormlyFieldConfigCache.html" target="_self" >FormlyFieldConfigCache</a></code>
+                                                        </td>
+                                                    
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <div>
+                            </div>
+                            <div class="io-description">
+                                <b>Returns : </b>    <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                            </div>
+                                <div class="io-description">
+                                    
+                                </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
@@ -346,7 +418,7 @@ import {
 import { evalExpression, evalStringExpression, evalExpressionValueSetter } from &#x27;./utils&#x27;;
 import { Observable } from &#x27;rxjs&#x27;;
 import { tap } from &#x27;rxjs/operators&#x27;;
-import { FormlyExtension } from &#x27;../../services/formly.config&#x27;;
+import { FormlyExtension } from &#x27;../extension&#x27;;
 
 /** @experimental */
 export class FieldExpressionExtension implements FormlyExtension {
@@ -423,6 +495,11 @@ export class FieldExpressionExtension implements FormlyExtension {
 
     field.options._checkField(field, true);
   }
+
+  onDestroy(field: FormlyFieldConfigCache) {
+    delete field._expressionProperties;
+  }
+
 
   private _evalExpression(expression, parentExpression?) {
     expression &#x3D; expression || (() &#x3D;&gt; false);
