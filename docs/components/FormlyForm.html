@@ -485,7 +485,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="99" class="link-to-prism">src/core/src/lib/components/formly.form.ts:99</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/core/src/lib/components/formly.form.ts:97</a></div>
                             </td>
                         </tr>
 
@@ -554,7 +554,7 @@
 
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="104" class="link-to-prism">src/core/src/lib/components/formly.form.ts:104</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="102" class="link-to-prism">src/core/src/lib/components/formly.form.ts:102</a></div>
                             </td>
                         </tr>
 
@@ -879,8 +879,6 @@ export class FormlyForm implements DoCheck, OnChanges, OnDestroy {
   ngOnDestroy() {
     this.clearModelSubscriptions();
     this.checkExpressionChange$.unsubscribe();
-
-    this.formlyBuilder.destroyField({ fieldGroup: this.fields });
   }
 
   changeModel(event: { key: string, value: any }) {
